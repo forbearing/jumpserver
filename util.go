@@ -45,7 +45,7 @@ func marshal(v any, isPretty ...bool) (data []byte, err error) {
 	return json.Marshal(v)
 }
 
-func concatPath(x any) (string, error) {
+func concatQuery(x any) (string, error) {
 	v, err := query.Values(x)
 	if err != nil {
 		return "", err
@@ -54,13 +54,17 @@ func concatPath(x any) (string, error) {
 }
 
 func concatURL(api string, x any) (string, error) {
-	path, err := concatPath(x)
+	query, err := concatQuery(x)
 	if err != nil {
 		return "", err
 	}
 
-	url := api + "?" + path
-	if url, err = gourl.PathUnescape(url); err != nil {
+	if len(query) == 0 {
+		return api, nil
+	}
+	l := gourl.URL{Path: api, RawQuery: query}
+	url, err := gourl.PathUnescape(l.String())
+	if err != nil {
 		return "", err
 	}
 	return url, nil
