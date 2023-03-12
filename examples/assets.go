@@ -13,10 +13,10 @@ func Example_Asset(jms *jumpserver.Client) {
 		err      error
 	)
 	var _, _ = asset, assets
-	jms.Asset().Delete(&jumpserver.DeleteAssetParam{Hostname: hostname})
+	jms.Asset().Asset().Delete(&jumpserver.DeleteAssetParam{Hostname: hostname})
 
 	// 1. Create jumpserver asset.
-	assets, err = jms.Asset().Create(&jumpserver.Asset{
+	assets, err = jms.Asset().Asset().Create(&jumpserver.Asset{
 		Hostname:     hostname,
 		IP:           ip,
 		Platform:     jumpserver.Linux,
@@ -29,7 +29,7 @@ func Example_Asset(jms *jumpserver.Client) {
 	id := assets[0].ID
 
 	// 2. Update jumpserver asset
-	assets, err = jms.Asset().Update(&jumpserver.Asset{
+	assets, err = jms.Asset().Asset().Update(&jumpserver.Asset{
 		ID:       id,
 		Hostname: hostname,
 		Platform: jumpserver.Linux,
@@ -37,7 +37,7 @@ func Example_Asset(jms *jumpserver.Client) {
 	})
 	handleObject(err, assets, "update assets")
 	//time.Sleep(time.Second * 10)
-	assets, err = jms.Asset().UpdatePartial(&jumpserver.Asset{
+	assets, err = jms.Asset().Asset().UpdatePartial(&jumpserver.Asset{
 		ID:       id,
 		Hostname: hostname,
 		Platform: jumpserver.Linux,
@@ -47,29 +47,29 @@ func Example_Asset(jms *jumpserver.Client) {
 	//time.Sleep(time.Second * 10)
 
 	// 3. List jumpserver assets.
-	if assets, err = jms.Asset().List(nil); err != nil {
+	if assets, err = jms.Asset().Asset().List(nil); err != nil {
 		panic(err)
 	}
 	handleObject(err, assets, "list all assets")
-	assets, err = jms.Asset().List(&jumpserver.ListAssetParam{ID: id})
+	assets, err = jms.Asset().Asset().List(&jumpserver.ListAssetParam{ID: id})
 	handleObject(err, assets, "list assets by id")
-	assets, err = jms.Asset().List(&jumpserver.ListAssetParam{Hostname: hostname})
+	assets, err = jms.Asset().Asset().List(&jumpserver.ListAssetParam{Hostname: hostname})
 	handleObject(err, assets, "list asset by hostname")
-	assets, err = jms.Asset().List(&jumpserver.ListAssetParam{IP: ip})
+	assets, err = jms.Asset().Asset().List(&jumpserver.ListAssetParam{IP: ip})
 	handleObject(err, assets, "list asset by ip")
 
 	// 4. Get jumpserver assets
-	asset, err = jms.Asset().Get(id)
+	asset, err = jms.Asset().Asset().Get(id)
 	handleObject(err, asset, "get asset by id")
 
 	// 5 Delete jumpserver asset by hostname.
-	jms.Asset().Delete(&jumpserver.DeleteAssetParam{ID: id})
+	jms.Asset().Asset().Delete(&jumpserver.DeleteAssetParam{ID: id})
 	handleObject(err, nil, "delete asset by id")
-	jms.Asset().Create(&jumpserver.Asset{Hostname: hostname, IP: ip, Platform: jumpserver.Linux})
-	jms.Asset().Delete(&jumpserver.DeleteAssetParam{Hostname: hostname})
+	jms.Asset().Asset().Create(&jumpserver.Asset{Hostname: hostname, IP: ip, Platform: jumpserver.Linux})
+	jms.Asset().Asset().Delete(&jumpserver.DeleteAssetParam{Hostname: hostname})
 	handleObject(err, nil, "delete asset by hostname")
-	jms.Asset().Create(&jumpserver.Asset{Hostname: hostname, IP: ip, Platform: jumpserver.Linux})
-	jms.Asset().Delete(&jumpserver.DeleteAssetParam{IP: ip})
+	jms.Asset().Asset().Create(&jumpserver.Asset{Hostname: hostname, IP: ip, Platform: jumpserver.Linux})
+	jms.Asset().Asset().Delete(&jumpserver.DeleteAssetParam{IP: ip})
 	handleObject(err, nil, "delete asset by ip")
 
 	// Output:
