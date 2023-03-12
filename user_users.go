@@ -129,9 +129,9 @@ type DeleteUserParam struct {
 // GetUserParam implements Parameter interface.
 type GetUserParam DeleteUserParam
 
-func (p *DeleteUserParam) Path() (string, error)          { return concatPath(p) }
+func (p *DeleteUserParam) Query() (string, error)         { return concatQuery(p) }
 func (p *DeleteUserParam) URL(api string) (string, error) { return concatURL(api, p) }
 func (p *DeleteUserParam) GetID() string                  { return p.ID }
-func (p *GetUserParam) Path() (string, error)             { return concatPath(p) }
+func (p *GetUserParam) Query() (string, error)            { return concatQuery(p) }
 func (p *GetUserParam) URL(api string) (string, error)    { return concatURL(api, p) }
 func (p *GetUserParam) GetID() string                     { return p.ID }

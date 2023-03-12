@@ -122,8 +122,7 @@ func (a *Asset) GetID() string {
 type DeleteAssetParam struct {
 	// ID 不参与 url query 查询
 	// 如果提供了 ID, queyr 只有 ID 一个
-	ID string
-
+	ID                 string `url:"id,omitempty"`
 	Hostname           string `url:"hostname,omitempty"`
 	IP                 string `url:"ip,omitempty"`
 	SystemUsersID      string `url:"system_users__id,omitempty"`
@@ -146,9 +145,9 @@ type DeleteAssetParam struct {
 // ListAssetParam implements Parameter interface.
 type ListAssetParam DeleteAssetParam
 
-func (p *DeleteAssetParam) Path() (string, error)          { return concatPath(p) }
+func (p *DeleteAssetParam) Query() (string, error)         { return concatQuery(p) }
 func (p *DeleteAssetParam) URL(api string) (string, error) { return concatURL(api, p) }
 func (p *DeleteAssetParam) GetID() string                  { return p.ID }
-func (p *ListAssetParam) Path() (string, error)            { return concatPath(p) }
+func (p *ListAssetParam) Query() (string, error)           { return concatQuery(p) }
 func (p *ListAssetParam) URL(api string) (string, error)   { return concatURL(api, p) }
 func (p *ListAssetParam) GetID() string                    { return p.ID }
