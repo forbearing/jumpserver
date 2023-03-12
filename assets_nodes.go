@@ -1,34 +1,17 @@
 package jumpserver
 
-import (
-	"encoding/json"
-)
-
 // NodeOperator handles communication with the user related method of the Jumpserver API.
 type NodeOperator struct {
 	api    string
 	client *Client
 }
 
-func (o *NodeOperator) Create(p *CreateNodeParam) (*Node, error) { return nil, nil }
-func (o *NodeOperator) Delete(p *DeleteNodeParam) (*Node, error) { return nil, nil }
-func (o *NodeOperator) Update(p *UpdateNodeParam) (*Node, error) { return nil, nil }
-func (o *NodeOperator) List() ([]*Node, error) {
-	data, err := o.client.get(o.api)
-	if err != nil {
-		return nil, err
-	}
-	var nodes []*Node
-	if err := json.Unmarshal(data, &nodes); err != nil {
-		return nil, err
-	}
-	return nodes, nil
-}
-
-// Get
-func (o *NodeOperator) Get(p *GetNodeParam) (*Node, error) {
-	return nil, nil
-}
+func (o *NodeOperator) Create(vl ...*Node) ([]*Node, error)        { return nil, nil }
+func (o *NodeOperator) Delete(p *DeleteNodeParam) error            { return nil }
+func (o *NodeOperator) Update(vl ...*Node) ([]*Node, error)        { return nil, nil }
+func (o *NodeOperator) UpdatePartial(vl ...*Node) ([]*Node, error) { return nil, nil }
+func (o *NodeOperator) List(p *ListNodeParam) ([]*Node, error)     { return nil, nil }
+func (o *NodeOperator) Get(id string) (*Node, error)               { return nil, nil }
 
 type Node struct {
 	ID        string `json:"id,omitempty"`
@@ -61,11 +44,5 @@ func (o *Node) GetID() string {
 	return o.ID
 }
 
-type CreateNodeParam struct {
-}
 type DeleteNodeParam struct{}
-type UpdateNodeParam struct{}
-
-// GetNodeParam
-type GetNodeParam struct {
-}
+type ListNodeParam struct{}
