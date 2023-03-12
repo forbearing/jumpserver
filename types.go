@@ -1,7 +1,7 @@
 package jumpserver
 
 const (
-	api_users   = "/api/v1/users/users/"
+	api_users   = "/api/v1/users/"
 	api_assets  = "/api/v1/assets/assets/"
 	api_nodes   = "/api/v1/assets/nodes/"
 	api_metrics = "/api/v1/prometheus/metrics"

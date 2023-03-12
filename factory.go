@@ -6,7 +6,7 @@ import (
 	gourl "net/url"
 )
 
-// createFactory product create method for jumpserver Object Executor.
+// createFactory product create method for jumpserver Object Operator.
 // create method used to creates jumpserver object. eg: asset, user or node.
 //
 // URL: api, eg: "/api/v1/assets/"
@@ -36,7 +36,7 @@ func createFactory[T *Asset | *User | *Node](client *Client, api string, tl []T)
 	return objs, nil
 }
 
-// deleteFactory product delete method for jumpserver Object Executor.
+// deleteFactory product delete method for jumpserver Object Operator.
 // delete method used to deletes jumpserver object. eg: asset, user or node.
 //
 // delete jumpserver object by id.
@@ -84,7 +84,7 @@ func deleteFactory[T *Asset | *User | *Node](client *Client, api string, p Param
 	return nil
 }
 
-// updateFactory product update method for jumpserver Object Executor.
+// updateFactory product update method for jumpserver Object Operator.
 // update method used to update or partial update jumpserver object. eg: asset, user or node.
 //
 // http method `put` for update.
@@ -178,15 +178,39 @@ func updateFactory[T *Asset | *User | *Node](client *Client, api, method string,
 	return objs, nil
 }
 
-// listFactory product list method for jumpserver Object Executor.
+// listFactory product list method for jumpserver Object Operator.
 // list uesed to lists jumpserver objects, eg: assets, users, nodes.
 //
-// URL: api, eg: "/api/v1/assets/"
-// Request: null
-// Response: list of object in json format
-// Status Code: 200
-func listFactory[T *Asset | *User | *Node](client *Client, api string) ([]T, error) {
-	data, code, err := client.request(http.MethodGet, api, nil)
+// 1.If parameter is null, list jumpserver all objects
+//   - URL: api, eg: "/api/v1/assets/"
+//     Request: null
+//     Response: list of object in json format
+//     Status Code: 200
+//
+// 2.If parameter not empty, list jumpserver objects by provided query parameter.
+//   - URL: api + query parameters
+//     eg: /api/v1/assets/assets/?hostname=server
+//     eg: /api/v1/assets/assets/?ip=1.1.1.1
+//     eg: /api/v1/assets/assets/?hostname=server&ip=1.1.1.1
+//   - Request: null
+//   - Response: list
+//   - Status Code: 200
+func listFactory[T *Asset | *User | *Node](client *Client, api string, p Parameter) ([]T, error) {
+	var (
+		data []byte
+		code int
+		url  string
+		err  error
+	)
+
+	if p == nil {
+		data, code, err = client.request(http.MethodGet, api, nil)
+	} else {
+		if url, err = p.URL(api); err != nil {
+			return nil, err
+		}
+		data, code, err = client.request(http.MethodGet, url, nil)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -200,7 +224,7 @@ func listFactory[T *Asset | *User | *Node](client *Client, api string) ([]T, err
 	return objs, nil
 }
 
-// getFactory product get method for jumpserver Object Executor.
+// getFactory product get method for jumpserver Object Operator.
 // get method used to get or query jumpserver object, eg: assets, users or nodes.
 //
 // get jumpserver object by id.
@@ -208,58 +232,25 @@ func listFactory[T *Asset | *User | *Node](client *Client, api string) ([]T, err
 //   - Request: null
 //   - Response: dict
 //   - Status Code: 200
-//
-// get jumpserver object by hostname and/or ip.
-//   - URL: api + query parameters
-//     eg: /api/v1/assets/assets/?hostname=server
-//     eg: /api/v1/assets/assets/?ip=1.1.1.1
-//     eg: /api/v1/assets/assets/?hostname=server&ip=1.1.1.1
-//   - Request: null
-//   - Response: list
-//   - Status Code: 200
-func getFactory[T *Asset | *User | *Node](client *Client, api string, p Parameter) ([]T, error) {
-	if p == nil {
-		return make([]T, 0), nil
-	}
-
+func getFactory[T *Asset | *User | *Node](client *Client, api, id string) (T, error) {
 	var (
-		getByID bool
-		data    []byte
-		code    int
-		url     string
-		err     error
+		data []byte
+		code int
+		url  string
+		err  error
 	)
-	if len(p.GetID()) != 0 {
-		if url, err = gourl.JoinPath(api, p.GetID(), "/"); err != nil {
-			return nil, err
-		}
-		data, code, err = client.request(http.MethodGet, url, nil)
-		getByID = true
-	} else {
-		if url, err = p.URL(api); err != nil {
-			return nil, err
-		}
-		data, code, err = client.request(http.MethodGet, url, nil)
+	if url, err = gourl.JoinPath(api, id, "/"); err != nil {
+		return nil, err
 	}
-	if err != nil {
+	if data, code, err = client.request(http.MethodGet, url, nil); err != nil {
 		return nil, err
 	}
 	if code != http.StatusOK {
 		return nil, Error(data)
 	}
-
-	// 通过 ID 来获取 Jumpserver 对象, 返回的结果是一个对象,而不是多个对象
-	if getByID {
-		obj := new(T)
-		if err = json.Unmarshal(data, obj); err != nil {
-			return nil, err
-		}
-		return []T{*obj}, nil
-	} else {
-		objs := make([]T, 0)
-		if err = json.Unmarshal(data, &objs); err != nil {
-			return nil, err
-		}
-		return objs, nil
+	obj := new(T)
+	if err = json.Unmarshal(data, obj); err != nil {
+		return nil, err
 	}
+	return *obj, nil
 }

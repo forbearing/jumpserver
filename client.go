@@ -56,9 +56,9 @@ func New(jmsUrl string, opts ...Option) (*Client, error) {
 	return jms, nil
 }
 
-func (c *Client) User() *UserService    { return &UserService{client: c, api: api_users} }
-func (c *Client) Asset() *AssetExecutor { return &AssetExecutor{client: c, api: api_assets} }
-func (c *Client) Node() *NodeService    { return &NodeService{client: c, api: api_nodes} }
+func (c *Client) User() *UserNode       { return &UserNode{client: c, api: api_users} }
+func (c *Client) Asset() *AssetOperator { return &AssetOperator{client: c, api: api_assets} }
+func (c *Client) Node() *NodeOperator   { return &NodeOperator{client: c, api: api_nodes} }
 
 // request
 func (c *Client) request(method, api string, playload []byte) (data []byte, code int, err error) {

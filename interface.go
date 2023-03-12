@@ -1,8 +1,8 @@
 package jumpserver
 
-// Executor is jumpserver object action executor.
+// Operator is jumpserver object action operator.
 // It has the ability to create, delete, update, list and get jumpserver objects.
-type Executor interface {
+type Operator interface {
 	// Create creates a jumpserver object.
 	Create(Object) (Object, error)
 	// Delete deletes a jumpserver object.
@@ -17,7 +17,7 @@ type Executor interface {
 	Get() ([]Object, error)
 }
 
-//var _ = Executor((*AssetExecutor)(nil))
+//var _ = Operator((*AssetExecutor)(nil))
 
 // Object represents Jumpserver object
 type Object interface {

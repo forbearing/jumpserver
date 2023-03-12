@@ -47,18 +47,20 @@ func Example_Asset(jms *jumpserver.Client) {
 	//time.Sleep(time.Second * 10)
 
 	// 3. List jumpserver assets.
-	if assets, err = jms.Asset().List(); err != nil {
+	if assets, err = jms.Asset().List(nil); err != nil {
 		panic(err)
 	}
-	handleObject(err, assets, "list asset")
+	handleObject(err, assets, "list all assets")
+	assets, err = jms.Asset().List(&jumpserver.ListAssetParam{ID: id})
+	handleObject(err, assets, "list assets by id")
+	assets, err = jms.Asset().List(&jumpserver.ListAssetParam{Hostname: hostname})
+	handleObject(err, assets, "list asset by hostname")
+	assets, err = jms.Asset().List(&jumpserver.ListAssetParam{IP: ip})
+	handleObject(err, assets, "list asset by ip")
 
 	// 4. Get jumpserver assets
-	assets, err = jms.Asset().Get(&jumpserver.GetAssetParam{ID: id})
-	handleObject(err, assets, "get asset by id")
-	assets, err = jms.Asset().Get(&jumpserver.GetAssetParam{Hostname: hostname})
-	handleObject(err, assets, "get asset by hostname")
-	assets, err = jms.Asset().Get(&jumpserver.GetAssetParam{IP: ip})
-	handleObject(err, assets, "get asset by ip")
+	asset, err = jms.Asset().Get(id)
+	handleObject(err, asset, "get asset by id")
 
 	// 5 Delete jumpserver asset by hostname.
 	jms.Asset().Delete(&jumpserver.DeleteAssetParam{ID: id})
@@ -72,12 +74,13 @@ func Example_Asset(jms *jumpserver.Client) {
 
 	// Output:
 	//Successfully create asset (total 1)
-	//Successfully update assets (total 1)
-	//Successfully partial update assets (total 1)
-	//Successfully list asset (total 1)
-	//Successfully get asset by id (total 1)
-	//Successfully get asset by hostname (total 1)
-	//Successfully get asset by ip (total 0)
+	//Successfully update assets (total 2)
+	//Successfully partial update assets (total 2)
+	//Successfully list all assets (total 1)
+	//Successfully list assets by id (total 1)
+	//Successfully list asset by hostname (total 1)
+	//Successfully list asset by ip (total 0)
+	//Successfully get asset by id
 	//Successfully delete asset by id
 	//Successfully delete asset by hostname
 	//Successfully delete asset by ip

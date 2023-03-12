@@ -4,17 +4,17 @@ import (
 	"encoding/json"
 )
 
-// NodeService handles communication with the user related method of the Jumpserver API.
-type NodeService struct {
+// NodeOperator handles communication with the user related method of the Jumpserver API.
+type NodeOperator struct {
 	api    string
 	client *Client
 }
 
-func (n *NodeService) Create(p *CreateNodeParam) (*Node, error) { return nil, nil }
-func (n *NodeService) Delete(p *DeleteNodeParam) (*Node, error) { return nil, nil }
-func (n *NodeService) Update(p *UpdateNodeParam) (*Node, error) { return nil, nil }
-func (n *NodeService) List() ([]*Node, error) {
-	data, err := n.client.get(n.api)
+func (o *NodeOperator) Create(p *CreateNodeParam) (*Node, error) { return nil, nil }
+func (o *NodeOperator) Delete(p *DeleteNodeParam) (*Node, error) { return nil, nil }
+func (o *NodeOperator) Update(p *UpdateNodeParam) (*Node, error) { return nil, nil }
+func (o *NodeOperator) List() ([]*Node, error) {
+	data, err := o.client.get(o.api)
 	if err != nil {
 		return nil, err
 	}
@@ -26,7 +26,7 @@ func (n *NodeService) List() ([]*Node, error) {
 }
 
 // Get
-func (n *NodeService) Get(p *GetNodeParam) (*Node, error) {
+func (o *NodeOperator) Get(p *GetNodeParam) (*Node, error) {
 	return nil, nil
 }
 
@@ -40,25 +40,25 @@ type Node struct {
 	OrgName   string `json:"org_name,omitempty"`
 }
 
-func (n *Node) String() string {
-	data, err := marshal(n, false)
+func (o *Node) String() string {
+	data, err := marshal(o, false)
 	if err != nil {
 		return ""
 	}
 	return String(data)
 }
-func (n *Node) PrettyString() string {
-	data, err := marshal(n, true)
+func (o *Node) PrettyString() string {
+	data, err := marshal(o, true)
 	if err != nil {
 		return ""
 	}
 	return String(data)
 }
-func (n *Node) GetName() string {
-	return n.Name
+func (o *Node) GetName() string {
+	return o.Name
 }
-func (n *Node) GetID() string {
-	return n.ID
+func (o *Node) GetID() string {
+	return o.ID
 }
 
 type CreateNodeParam struct {
