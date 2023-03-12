@@ -29,7 +29,7 @@ type Object interface {
 
 // Parameter structure represents url query string.
 type Parameter interface {
-	Path() (string, error)
+	Query() (string, error)
 	URL(api string) (string, error)
 	GetID() string
 }
