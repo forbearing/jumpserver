@@ -1,0 +1,4 @@
+*.bak
+*.nopush
+*.nogit
+.DS_Store

@@ -1,0 +1,3 @@
+package jumpserver
+
+func NewReuqest() {}
