@@ -2,8 +2,7 @@ package jumpserver
 
 const (
 	api_users   = "/api/v1/users/"
-	api_assets  = "/api/v1/assets/assets/"
-	api_nodes   = "/api/v1/assets/nodes/"
+	api_assets  = "/api/v1/assets/"
 	api_metrics = "/api/v1/prometheus/metrics"
 
 	gmtFmt    = "Mon, 02 Jan 2006 15:04:05 GMT"
