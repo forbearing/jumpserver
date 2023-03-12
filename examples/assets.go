@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/forbearing/jumpserver"
 )
 
@@ -27,6 +30,7 @@ func Example_Asset(jms *jumpserver.Client) {
 	})
 	handleObject(err, assets, "create asset")
 	id := assets[0].ID
+	fmt.Println(assets)
 
 	// 2. Update jumpserver asset
 	assets, err = jms.Asset().Asset().Update(&jumpserver.Asset{
@@ -46,6 +50,7 @@ func Example_Asset(jms *jumpserver.Client) {
 	handleObject(err, assets, "partial update assets")
 	//time.Sleep(time.Second * 10)
 
+	time.Sleep(time.Second * 3)
 	// 3. List jumpserver assets.
 	if assets, err = jms.Asset().Asset().List(nil); err != nil {
 		panic(err)
