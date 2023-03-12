@@ -92,7 +92,7 @@ type Asset struct {
 
 // String
 func (s *Asset) String() string {
-	data, err := marshal(s, false)
+	data, err := marshal(s)
 	if err != nil {
 		return err.Error()
 	}
