@@ -66,7 +66,7 @@ func deleteFactory[T *Asset | *User | *Node](client *Client, api string, p Param
 	if len(p.GetID()) != 0 {
 		// 通过 ID 删除对象总是成功, 如果 ID 对应的对象不存在也不会报错,只是没有删除
 		if url, err = gourl.JoinPath(api, p.GetID(), "/"); err != nil {
-			return nil
+			return err
 		}
 		data, code, err = client.request(http.MethodDelete, url, nil)
 	} else {
