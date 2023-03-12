@@ -18,7 +18,7 @@ func (o *AssetOperator) Create(vl ...*Asset) ([]*Asset, error) {
 
 // Delete deletes jumpserver asset.
 // more detail see deleteFactory function document.
-func (o *AssetOperator) Delete(p *DeleteAssetParam) (err error) {
+func (o *AssetOperator) Delete(p *DeleteAssetParam) error {
 	return deleteFactory[*Asset](o.client, o.api, p)
 }
 
