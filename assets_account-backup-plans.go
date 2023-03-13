@@ -8,22 +8,22 @@ type AccountBackupPlanOperator struct {
 	api    string
 }
 
-func (o AccountBackupPlanOperator) Create(vl ...*AccountBackupPlan) ([]*AccountBackupPlan, error) {
+func (o *AccountBackupPlanOperator) Create(vl ...*AccountBackupPlan) ([]*AccountBackupPlan, error) {
 	return createFactory(o.client, o.api, vl)
 }
-func (o AccountBackupPlanOperator) Delete(p *AccountBackupPlanDeleteParam) error {
+func (o *AccountBackupPlanOperator) Delete(p *AccountBackupPlanDeleteParam) error {
 	return deleteFactory[*AccountBackupPlan](o.client, o.api, p)
 }
-func (o AccountBackupPlanOperator) Update(vl ...*AccountBackupPlan) ([]*AccountBackupPlan, error) {
+func (o *AccountBackupPlanOperator) Update(vl ...*AccountBackupPlan) ([]*AccountBackupPlan, error) {
 	return updateFactory(o.client, o.api, http.MethodPut, vl)
 }
-func (o AccountBackupPlanOperator) UpdatePartial(vl ...*AccountBackupPlan) ([]*AccountBackupPlan, error) {
+func (o *AccountBackupPlanOperator) UpdatePartial(vl ...*AccountBackupPlan) ([]*AccountBackupPlan, error) {
 	return updateFactory(o.client, o.api, http.MethodPatch, vl)
 }
-func (o AccountBackupPlanOperator) List(p *AccountBackupPlanListParam) ([]*AccountBackupPlan, error) {
+func (o *AccountBackupPlanOperator) List(p *AccountBackupPlanListParam) ([]*AccountBackupPlan, error) {
 	return listFactory[*AccountBackupPlan](o.client, o.api, p)
 }
-func (o AccountBackupPlanOperator) Get(id string) (*AccountBackupPlan, error) {
+func (o *AccountBackupPlanOperator) Get(id string) (*AccountBackupPlan, error) {
 	return getFactory[*AccountBackupPlan](o.client, o.api, id)
 }
 
