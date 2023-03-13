@@ -23,26 +23,10 @@ type Node struct {
 	OrgName   string `json:"org_name,omitempty"`
 }
 
-func (o *Node) String() string {
-	data, err := marshal(o, false)
-	if err != nil {
-		return ""
-	}
-	return String(data)
-}
-func (o *Node) PrettyString() string {
-	data, err := marshal(o, true)
-	if err != nil {
-		return ""
-	}
-	return String(data)
-}
-func (o *Node) GetName() string {
-	return o.Name
-}
-func (o *Node) GetID() string {
-	return o.ID
-}
+func (n *Node) String() string       { return jsonAny(n) }
+func (n *Node) PrettyString() string { return prettyJsonAny(n) }
+func (n *Node) GetName() string      { return "Node" }
+func (n *Node) GetID() string        { return n.ID }
 
 type DeleteNodeParam struct{}
 type ListNodeParam struct{}

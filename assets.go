@@ -13,7 +13,7 @@ func (n *AssetNode) AccountBackupPlanExecution() *AccountBackupPlanExecutionOper
 	api, _ := url.JoinPath(n.api, "/account-backup-plan-executions/")
 	return &AccountBackupPlanExecutionOperator{client: n.client, api: api}
 }
-func (n *AssetNode) AccountBackup() *AccountBackupPlanOperator {
+func (n *AssetNode) AccountBackupPlan() *AccountBackupPlanOperator {
 	api, _ := url.JoinPath(n.api, "/account-backup-plans/")
 	return &AccountBackupPlanOperator{client: n.client, api: api}
 }

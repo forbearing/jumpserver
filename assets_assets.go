@@ -90,38 +90,22 @@ type Asset struct {
 	OrgName          string   `json:"org_name,omitempty"`
 }
 
-// String
-func (a *Asset) String() string {
-	data, err := marshal(a)
-	if err != nil {
-		return err.Error()
-	}
-	return String(data)
-}
+// String implements fmt.Stringer interface.
+func (a *Asset) String() string { return jsonAny(a) }
 
 // PrettyString
-func (a *Asset) PrettyString() string {
-	data, err := marshal(a, true)
-	if err != nil {
-		return err.Error()
-	}
-	return String(data)
-}
+func (a *Asset) PrettyString() string { return prettyJsonAny(a) }
 
 // GetName returns jumpserver asset name.
-func (a *Asset) GetName() string {
-	return "Asset"
-}
+func (a *Asset) GetName() string { return "Asset" }
 
 // GetID returns jumpserver asset id.
-func (a *Asset) GetID() string {
-	return a.ID
-}
+func (a *Asset) GetID() string { return a.ID }
 
 // DeleteAssetParam implements Parameter interface.
 type DeleteAssetParam struct {
-	// ID 不参与 url query 查询
-	// 如果提供了 ID, queyr 只有 ID 一个
+	// List operation not support query by ID
+	// Delete operation is supported query by ID.
 	ID                 string `url:"id,omitempty"`
 	Hostname           string `url:"hostname,omitempty"`
 	IP                 string `url:"ip,omitempty"`
