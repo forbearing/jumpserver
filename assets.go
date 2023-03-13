@@ -46,7 +46,7 @@ func (n *AssetNode) FavoriteAsset() *FavoriteAssetOperator {
 	return &FavoriteAssetOperator{client: n.client, api: api}
 }
 func (n *AssetNode) Gateway() *GatewayOperator {
-	api, _ := url.JoinPath(n.api, "/favorite-assets/")
+	api, _ := url.JoinPath(n.api, "/gateways/")
 	return &GatewayOperator{client: n.client, api: api}
 }
 func (n *AssetNode) GatheredUser() *GatheredUserOperator {
