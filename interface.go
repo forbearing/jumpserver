@@ -23,7 +23,6 @@ type Operator interface {
 type Object interface {
 	String() string
 	PrettyString() string
-	GetName() string
 	GetID() string
 }
 
@@ -33,3 +32,7 @@ type Parameter interface {
 	URL(api string) (string, error)
 	GetID() string
 }
+
+type Logger interface{}
+
+type StructuredLogger interface{}
