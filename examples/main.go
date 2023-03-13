@@ -24,8 +24,14 @@ func main() {
 		panic(err)
 	}
 
-	Example_Asset(jms)
-	Example_User(jms)
+	//Asset_Asset(jms)
+	//Asset_AccountBackupPlanExecution(jms)
+	//Asset_AccountBackupPlan(jms)
+	//Asset_AccountHistory(jms)
+	//Asset_Account(jms)
+	//Asset_CmdFilterRule(jms)
+	//Asset_CmdFilter(jms)
+	Asset_Domain(jms)
 }
 
 func handleObject(err error, obj any, action string) {
