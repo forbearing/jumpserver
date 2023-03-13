@@ -64,6 +64,22 @@ func WithRateLimiter(limiter *rate.Limiter) Option {
 	})
 }
 
+// WithLogger
+func WithLogger(logger Logger) Option {
+	return optionFunc(func(c *Client) error {
+		c.Logger = logger
+		return nil
+	})
+}
+
+// WithStructuredLogger
+func WithStructuredLogger(structuredLogger StructuredLogger) Option {
+	return optionFunc(func(c *Client) error {
+		c.StructuredLogger = structuredLogger
+		return nil
+	})
+}
+
 type SigAuth struct {
 	AccessKey string
 	SecretKey string

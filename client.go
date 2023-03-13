@@ -30,6 +30,9 @@ type Client struct {
 	httpClient *http.Client
 
 	sigAuth *SigAuth
+
+	Logger
+	StructuredLogger
 }
 
 // New

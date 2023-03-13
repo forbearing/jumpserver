@@ -2,6 +2,7 @@ package jumpserver
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	gourl "net/url"
 )
@@ -13,7 +14,7 @@ import (
 // Request: list of objects in json format.
 // Response: list of objects in json format.
 // Status Code: 201
-func createFactory[T *Asset | *User | *Node](client *Client, api string, tl []T) ([]T, error) {
+func createFactory[T Object](client *Client, api string, tl []T) ([]T, error) {
 	if tl == nil {
 		return make([]T, 0), nil
 	}
@@ -27,7 +28,7 @@ func createFactory[T *Asset | *User | *Node](client *Client, api string, tl []T)
 	}
 	// successfully created response 201 instead of 200.
 	if code != http.StatusCreated {
-		return nil, Error(data)
+		return nil, errorAny(data)
 	}
 	objs := make([]T, len(tl))
 	if err := json.Unmarshal(data, &objs); err != nil {
@@ -53,7 +54,7 @@ func createFactory[T *Asset | *User | *Node](client *Client, api string, tl []T)
 //   - Request: null
 //   - Response: null
 //   - Status Code: 204
-func deleteFactory[T *Asset | *User | *Node](client *Client, api string, p Parameter) error {
+func deleteFactory[T Object](client *Client, api string, p Parameter) error {
 	if p == nil {
 		return nil
 	}
@@ -79,7 +80,11 @@ func deleteFactory[T *Asset | *User | *Node](client *Client, api string, p Param
 		return err
 	}
 	if code != http.StatusNoContent {
-		return Error(data)
+		if len(data) != 0 {
+			return errorAny(data)
+		} else {
+			return errors.New("response code: " + stringAny(code))
+		}
 	}
 	return nil
 }
@@ -107,7 +112,7 @@ func deleteFactory[T *Asset | *User | *Node](client *Client, api string, p Param
 //     Request: dict
 //     Response: dict
 //     Status Code: 200
-func updateFactory[T *Asset | *User | *Node](client *Client, api, method string, tl []T) ([]T, error) {
+func updateFactory[T Object](client *Client, api, method string, tl []T) ([]T, error) {
 	if len(tl) == 0 {
 		return make([]T, 0), nil
 	}
@@ -158,7 +163,7 @@ func updateFactory[T *Asset | *User | *Node](client *Client, api, method string,
 	}
 	// successfully update response 200 instead of 201.
 	if code != http.StatusOK {
-		return nil, Error(data)
+		return nil, errorAny(data)
 	}
 
 	objs := make([]T, len(tl))
@@ -195,7 +200,7 @@ func updateFactory[T *Asset | *User | *Node](client *Client, api, method string,
 //   - Request: null
 //   - Response: list
 //   - Status Code: 200
-func listFactory[T *Asset | *User | *Node](client *Client, api string, p Parameter) ([]T, error) {
+func listFactory[T Object](client *Client, api string, p Parameter) ([]T, error) {
 	var (
 		data []byte
 		code int
@@ -215,7 +220,7 @@ func listFactory[T *Asset | *User | *Node](client *Client, api string, p Paramet
 		return nil, err
 	}
 	if code != http.StatusOK {
-		return nil, Error(data)
+		return nil, errorAny(data)
 	}
 	objs := make([]T, 0)
 	if err := json.Unmarshal(data, &objs); err != nil {
@@ -232,7 +237,7 @@ func listFactory[T *Asset | *User | *Node](client *Client, api string, p Paramet
 //   - Request: null
 //   - Response: dict
 //   - Status Code: 200
-func getFactory[T *Asset | *User | *Node](client *Client, api, id string) (T, error) {
+func getFactory[T Object](client *Client, api, id string) (T, error) {
 	var (
 		data []byte
 		code int
@@ -240,17 +245,17 @@ func getFactory[T *Asset | *User | *Node](client *Client, api, id string) (T, er
 		err  error
 	)
 	if url, err = gourl.JoinPath(api, id, "/"); err != nil {
-		return nil, err
+		return *(new(T)), err
 	}
 	if data, code, err = client.request(http.MethodGet, url, nil); err != nil {
-		return nil, err
+		return *(new(T)), err
 	}
 	if code != http.StatusOK {
-		return nil, Error(data)
+		return *(new(T)), errorAny(data)
 	}
 	obj := new(T)
 	if err = json.Unmarshal(data, obj); err != nil {
-		return nil, err
+		return *(new(T)), err
 	}
 	return *obj, nil
 }

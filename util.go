@@ -10,8 +10,8 @@ import (
 	"github.com/google/go-querystring/query"
 )
 
-// String format anything to string.
-func String(x any) string {
+// stringAny format anything to string.
+func stringAny(x any) string {
 	if x == nil {
 		return ""
 	}
@@ -30,12 +30,23 @@ func String(x any) string {
 		return fmt.Sprintf("%v", x)
 	}
 }
-
-// Error
-func Error(x any) error {
-	return errors.New(String(x))
+func errorAny(x any) error {
+	return errors.New(stringAny(x))
 }
-
+func jsonAny(v any) string {
+	data, err := marshal(v)
+	if err != nil {
+		return err.Error()
+	}
+	return stringAny(data)
+}
+func prettyJsonAny(v any) string {
+	data, err := marshal(v, true)
+	if err != nil {
+		return err.Error()
+	}
+	return stringAny(data)
+}
 func marshal(v any, isPretty ...bool) (data []byte, err error) {
 	if len(isPretty) >= 1 {
 		if isPretty[0] {
@@ -44,7 +55,6 @@ func marshal(v any, isPretty ...bool) (data []byte, err error) {
 	}
 	return json.Marshal(v)
 }
-
 func concatQuery(x any) (string, error) {
 	v, err := query.Values(x)
 	if err != nil {
