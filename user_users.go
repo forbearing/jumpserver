@@ -84,29 +84,10 @@ type User struct {
 	PasswordStrategy        string   `json:"password_strategy,omitempty"`
 }
 
-// String
-func (u *User) String() string {
-	data, err := marshal(u)
-	if err != nil {
-		return err.Error()
-	}
-	return String(data)
-}
-
-// PrettyString
-func (u *User) PrettyString() string {
-	data, err := marshal(u, true)
-	if err != nil {
-		return err.Error()
-	}
-	return String(data)
-}
-func (u *User) GetName() string {
-	return "User"
-}
-func (u *User) GetID() string {
-	return u.ID
-}
+func (u *User) String() string       { return jsonAny(u) }
+func (u *User) PrettyString() string { return prettyJsonAny(u) }
+func (u *User) GetName() string      { return "User" }
+func (u *User) GetID() string        { return u.ID }
 
 // DeleteUserParam implements Parameter interface.
 type DeleteUserParam struct {
